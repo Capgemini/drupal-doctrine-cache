@@ -1,0 +1,22 @@
+{
+    "name": "capgemini/drupal_doctrine_cache",
+    "description": "A mechanism for doctrine to cache using Drupal's caching API.",
+    "minimum-stability": "stable",
+    "license": "Apache-2.0",
+    "keywords": ["cache", "caching", "doctrine", "drupal"],
+    "authors": [
+        {
+            "name": "Iain Potter",
+            "email": "iain.m.potter@capgemini.com"
+        }
+    ],
+    "autoload": {
+        "psr-0" : {
+            "Capgemini\\Cache" : "lib"
+        }
+    },
+    "require": {
+        "php": ">=5.3.0",
+        "doctrine/common": "2.4.*"
+    }
+}
