@@ -6,7 +6,6 @@ It's fairly straightforward to use, just configure your EntityManager with a new
 
 ```
 $cache = new \Capgemini\Cache\DrupalDoctrineCache();
-$cache->setCacheTable($this->drupalCache);
 $entityManagerConfiguration->setMetaDataCacheImpl($cache);
 $entityManagerConfiguration->setQueryCacheImpl($cache);
 $entityManagerConfiguration->setResultCacheImpl($cache);
