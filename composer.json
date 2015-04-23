@@ -11,8 +11,8 @@
         }
     ],
     "autoload": {
-        "psr-0" : {
-            "Capgemini\\Cache" : "lib"
+        "psr-4" : {
+            "Capgemini\\Cache\\" : "src"
         }
     },
     "require": {
