@@ -1,86 +1,21 @@
 <?php
 namespace Capgemini\Cache;
 
-use Doctrine\Common\Cache\Cache;
+use Doctrine\Common\Cache\CacheProvider;
 
 /**
  * Doctrine cache that uses the Drupal caching API for storage.
  */
-class DrupalDoctrineCache implements Cache {
+class DrupalDoctrineCache extends CacheProvider {
   const CACHE_PREFIX = "doctrine:";
 
   protected $cache_table = 'cache';
 
   /**
-   * Fetches a cache entry from a Drupal cache.
-   *
-   * @inheritdoc
-   */
-  public function fetch($id) {
-    $entry = cache_get($this->getCacheId($id), $this->cache_table);
-    if (empty($entry) || !isset($entry->data)) {
-      return FALSE;
-    }
-
-    return $entry->data;
-  }
-
-  /**
-   * Checks if the Drupal cache contains the specified entry.
-   *
-   * @inheritdoc
-   */
-  public function contains($id) {
-    $entry = $this->fetch($id);
-    return !empty($entry);
-  }
-
-  /**
-   * Saves data to the Drupal cache.
-   *
-   * @inheritdoc
-   */
-  public function save($id, $data, $lifeTime = NULL) {
-    // Doctrine defines NULL to mean permanent cache.
-    if ($lifeTime == NULL) {
-      $lifeTime = CACHE_PERMANENT;
-    }
-    else {
-      $lifeTime += time();
-    }
-
-    // Cache data, converting Doctrine lifetime to a unix timestamp for Drupal.
-    $result = cache_set($this->getCacheId($id), $data, $this->cache_table, $lifeTime);
-    return empty($result) ? FALSE : TRUE;
-  }
-
-  /**
-   * Deletes the entry from the Drupal cache.
-   *
-   * @inheritdoc
-   */
-  public function delete($id) {
-    cache_clear_all($this->getCacheId($id), $this->cache_table);
-    return TRUE;
-  }
-
-  /**
-   * Not implemented in this cache.
-   *
-   * Original description :-
-   *
-   * @inheritdoc
-   *
-   */
-  public function getStats() {
-    // We don't implement this.
-    return NULL;
-  }
-
-  /**
    * Generate a cache ID for the cache entry, based on the original ID.
    *
-   * @param $id
+   * @param string $id
+   * @return string
    */
   protected function getCacheId($id) {
     return self::CACHE_PREFIX . "{$id}";
@@ -104,4 +39,76 @@ class DrupalDoctrineCache implements Cache {
     return $this->cache_table;
   }
 
-} 
+  /**
+   * {@inheritdoc}
+   */
+  protected function doFetch($id) {
+    $entry = cache_get($this->getCacheId($id), $this->cache_table);
+    if (empty($entry) || !isset($entry->data)) {
+      return FALSE;
+    }
+
+    return $entry->data;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function doContains($id) {
+    $entry = $this->fetch($id);
+    return !empty($entry);
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  protected function doSave($id, $data, $lifeTime = 0) {
+    // Doctrine defines NULL to mean permanent cache.
+    if ($lifeTime == NULL) {
+      $lifeTime = CACHE_PERMANENT;
+    }
+    else {
+      $lifeTime += time();
+    }
+
+    // Cache data, converting Doctrine lifetime to a unix timestamp for Drupal.
+    $result = cache_set($this->getCacheId($id), $data, $this->cache_table, $lifeTime);
+    return empty($result) ? FALSE : TRUE;
+  }
+
+  /**
+   * Deletes a cache entry.
+   *
+   * @param string $id The cache id.
+   *
+   * @return boolean TRUE if the cache entry was successfully deleted, FALSE otherwise.
+   */
+  protected function doDelete($id) {
+    cache_clear_all($this->getCacheId($id), $this->cache_table);
+    return TRUE;
+  }
+
+  /**
+   * Flushes all cache entries.
+   *
+   * With Drupal, caches are not really cleared until cron is run.
+   *
+   * @return boolean TRUE if the cache entries were successfully flushed, FALSE otherwise.
+   */
+  protected function doFlush() {
+    cache_clear_all('*', $this->cache_table, TRUE);
+    return TRUE;
+  }
+
+  /**
+   * Not implemented in this cache.
+   *
+   * Original description :-
+   *
+   * {@inheritdoc}
+   *
+   */
+  protected function doGetStats() {
+    return NULL;
+  }
+}
