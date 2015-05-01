@@ -10,7 +10,7 @@ namespace Capgemini\Cache;
 trait DrupalCacheAdapter {
 
   public function cache_get($cid, $bin = 'cache') {
-    cache_get($cid, $bin);
+    return cache_get($cid, $bin);
   }
 
   public function cache_set($cid, $data, $bin = 'cache', $expire = CACHE_PERMANENT) {
