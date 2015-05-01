@@ -7,6 +7,8 @@ use Doctrine\Common\Cache\CacheProvider;
  * Doctrine cache that uses the Drupal caching API for storage.
  */
 class DrupalDoctrineCache extends CacheProvider {
+  use DrupalCacheAdapter;
+
   const CACHE_PREFIX = "doctrine:";
 
   protected $cache_table = 'cache';
@@ -43,7 +45,7 @@ class DrupalDoctrineCache extends CacheProvider {
    * {@inheritdoc}
    */
   protected function doFetch($id) {
-    $entry = cache_get($this->getCacheId($id), $this->cache_table);
+    $entry = $this->cache_get($this->getCacheId($id), $this->cache_table);
     if (empty($entry) || !isset($entry->data)) {
       return FALSE;
     }
@@ -72,7 +74,7 @@ class DrupalDoctrineCache extends CacheProvider {
     }
 
     // Cache data, converting Doctrine lifetime to a unix timestamp for Drupal.
-    $result = cache_set($this->getCacheId($id), $data, $this->cache_table, $lifeTime);
+    $result = $this->cache_set($this->getCacheId($id), $data, $this->cache_table, $lifeTime);
     return empty($result) ? FALSE : TRUE;
   }
 
@@ -84,7 +86,7 @@ class DrupalDoctrineCache extends CacheProvider {
    * @return boolean TRUE if the cache entry was successfully deleted, FALSE otherwise.
    */
   protected function doDelete($id) {
-    cache_clear_all($this->getCacheId($id), $this->cache_table);
+    $this->cache_clear_all($this->getCacheId($id), $this->cache_table);
     return TRUE;
   }
 
@@ -96,7 +98,7 @@ class DrupalDoctrineCache extends CacheProvider {
    * @return boolean TRUE if the cache entries were successfully flushed, FALSE otherwise.
    */
   protected function doFlush() {
-    cache_clear_all('*', $this->cache_table, TRUE);
+    $this->cache_clear_all('*', $this->cache_table, TRUE);
     return TRUE;
   }
 
