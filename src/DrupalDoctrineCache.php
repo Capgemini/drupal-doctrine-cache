@@ -55,7 +55,7 @@ class DrupalDoctrineCache extends CacheProvider {
    * {@inheritdoc}
    */
   protected function doContains($id) {
-    $entry = $this->fetch($id);
+    $entry = $this->doFetch($id);
     return !empty($entry);
   }
 
