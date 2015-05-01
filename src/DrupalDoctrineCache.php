@@ -69,7 +69,7 @@ class DrupalDoctrineCache extends CacheProvider {
     if ($lifeTime === NULL) {
       $lifeTime = CACHE_PERMANENT;
     }
-    else {
+    elseif ($lifeTime > 0) {
       $lifeTime += time();
     }
 

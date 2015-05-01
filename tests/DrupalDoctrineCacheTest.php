@@ -29,7 +29,9 @@ class DrupalDoctrineCacheTest extends \PHPUnit_Framework_TestCase {
     $cache->save('key', 'value');
     $this->assertEquals(1, $cache->getCallCount('cache_set:doctrine:[key][1],value,cache,*', TRUE));
     $cache->save('key', 'value', NULL);
-    $this->assertEquals(1, $cache->getCallCount('cache_set:doctrine:[key][1],value,cache,0'));
+    $this->assertEquals(2, $cache->getCallCount('cache_set:doctrine:[key][1],value,cache,0'));
+    $cache->save('key', 'value', 60);
+    $this->assertEquals(1, $cache->getCallCount('cache_set:doctrine:[key][1],value,cache,' . substr(time(), 0, 1) . '*', TRUE));
   }
 
   /**
