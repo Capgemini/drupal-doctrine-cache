@@ -64,7 +64,7 @@ class DrupalDoctrineCache extends CacheProvider {
    */
   protected function doSave($id, $data, $lifeTime = 0) {
     // Doctrine defines NULL to mean permanent cache.
-    if ($lifeTime == NULL) {
+    if ($lifeTime === NULL) {
       $lifeTime = CACHE_PERMANENT;
     }
     else {
