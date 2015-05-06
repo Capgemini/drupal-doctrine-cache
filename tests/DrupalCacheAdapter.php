@@ -119,7 +119,7 @@ trait DrupalCacheAdapter {
    *
    * @param string $key
    *   The key to get the call count for.
-   * @param boolean @wildcard
+   * @param boolean $wildcard
    *   Set to TRUE if $key contains a wildcard ('*') character.
    *
    * @return int
