@@ -108,6 +108,9 @@ class DrupalDoctrineCache extends CacheProvider {
    * Original description :-
    *
    * {@inheritdoc}
+   *
+   * @return NULL
+   *
    * @codeCoverageIgnore
    */
   protected function doGetStats() {
