@@ -98,7 +98,7 @@ trait DrupalCacheAdapter {
    * @see cache_get()
    */
   public function cache_set($cid, $data, $bin = 'cache', $expire = CACHE_PERMANENT) {
-    cache_set($cid, $data, $bin, $expire);
+    return cache_set($cid, $data, $bin, $expire);
   }
 
   /**
