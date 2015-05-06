@@ -54,6 +54,8 @@ class DrupalDoctrineCache extends CacheProvider {
   }
 
   /**
+   * Checks if the Drupal cache contains the specified entry.
+   *
    * {@inheritdoc}
    */
   protected function doContains($id) {
