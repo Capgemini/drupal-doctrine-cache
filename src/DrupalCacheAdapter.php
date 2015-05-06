@@ -1,5 +1,10 @@
 <?php
 
+/**
+ * @file
+ * Contains Capgemini\Cache\DrupalCacheAdapter
+ */
+
 namespace Capgemini\Cache;
 
 /**
